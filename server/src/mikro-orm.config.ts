@@ -13,6 +13,5 @@ export default {
     entities:[Post],
     dbName: "anonymous-diary",
     type: "postgresql",
-    debug: !__prod__,
-    password: 'koala28*'
+    debug: !__prod__
 } as Parameters<typeof MikroORM.init>[0];
