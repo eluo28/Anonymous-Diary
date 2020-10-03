@@ -3,6 +3,7 @@ import { MyContext } from '../types';
 import {Resolver,Query, Ctx, Arg, Int, Mutation} from 'type-graphql';
 
 //CRUD operations
+//resolver = implementation of giving users things to call
 @Resolver()
 export class PostResolver{
     //@query for getting data
