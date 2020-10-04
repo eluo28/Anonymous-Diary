@@ -12,9 +12,10 @@ export default {
         pattern: /^[\w-]+\d+\.[tj]s$/,
     },
     entities:[Post,User],
-    dbName: "anonymous-diary",
+    dbName: "anonymousdiary",
     type: "postgresql",
     user:"postgres",
     password:"postgres",
+    
     debug: !__prod__
 } as Parameters<typeof MikroORM.init>[0];
