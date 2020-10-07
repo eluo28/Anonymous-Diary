@@ -1,85 +1,84 @@
-import {MikroORM} from "@mikro-orm/core";
+import { MikroORM } from "@mikro-orm/core";
 import { COOKIE_NAME, __prod__ } from "./constants";
-import microConfig from './mikro-orm.config';
-import express from 'express';
-import {ApolloServer} from 'apollo-server-express';
-import {buildSchema} from 'type-graphql';
+import microConfig from "./mikro-orm.config";
+import express from "express";
+import { ApolloServer } from "apollo-server-express";
+import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import "reflect-metadata";
 import { UserResolver } from "./resolvers/user";
-import redis from "redis";
+import Redis from "ioredis";
 import session from "express-session";
-import connectRedis from 'connect-redis';
+import connectRedis from "connect-redis";
 import { MyContext } from "./types";
 import cors from "cors";
+import { sendEmail } from "./utils/sendEmail";
+
+const main = async () => {
+  sendEmail("eluo28@hotmail.com", "hi there");
+  //connect database
+  const orm = await MikroORM.init(microConfig);
+  await orm.getMigrator().up();
+
+  const app = express();
+
+  const RedisStore = connectRedis(session); //Redis for caching
+  const redis = new Redis();
 
 
 
-const main = async () =>{
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
 
-    //connect database
-    const orm = await MikroORM.init(microConfig);
-    await orm.getMigrator().up();
+  app.use(
+    session({
+      name: COOKIE_NAME,
+      store: new RedisStore({
+        client: redis,
+        disableTouch: true,
+      }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, //10 years
+        httpOnly: true,
+        secure: __prod__, //cookie only works in https
+        sameSite: "lax", //csrf
+      },
+      secret: "qwearievuanfdvkJfxnvs",
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
 
-    const app = express();
-    
-    const RedisStore = connectRedis(session); //Redis for caching
-    const redisClient = redis.createClient();
+  const apolloServer = new ApolloServer({
+    schema: await buildSchema({
+      resolvers: [HelloResolver, PostResolver, UserResolver],
+      validate: false,
+    }),
+    context: ({ req, res }): MyContext => ({
+      em: orm.em,
+      req: req as MyContext["req"],
+      res,
+      redis
+    }),
+  });
 
-    app.use(
-        cors({
-            origin:'http://localhost:3000',
-            credentials:true
-        })
-    );
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+  });
 
-    app.use(
-        session({
-            name: COOKIE_NAME,
-            store: new RedisStore({
-                client:redisClient,
-                disableTouch: true
-            }),
-            cookie:{
-                maxAge: 1000 * 60 * 60 * 24 * 365 * 10, //10 years
-                httpOnly: true,
-                secure: __prod__, //cookie only works in https
-                sameSite: 'lax' //csrf
-            },
-            secret: "qwearievuanfdvkJfxnvs",
-            resave: false,
-            saveUninitialized: false
-        })
-    );
-
-    const apolloServer = new ApolloServer({
-        schema: await buildSchema({
-            resolvers:[HelloResolver,PostResolver,UserResolver],
-            validate:false,
-        }),
-        context: ({req,res}): MyContext =>({
-            em: orm.em,
-            req: req as MyContext["req"],
-            res
-        }),
-    });
-
-    apolloServer.applyMiddleware({
-        app,
-        cors:false
-    });
-
-    //start server
-    app.listen(4000,()=>{
-        console.log("server started on localhost:4000");
-    });
-
-
+  //start server
+  app.listen(4000, () => {
+    console.log("server started on localhost:4000");
+  });
 };
 
-
 //run main
-main().catch((err)=>{
-    console.error(err);
+main().catch((err) => {
+  console.error(err);
 });
