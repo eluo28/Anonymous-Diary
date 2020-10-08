@@ -36,6 +36,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     //user logged in
     body = (
       <Flex>
+        <Box>
+          <NextLink href="/create-post">
+            <Link mr="4">Create Post</Link>
+          </NextLink>
+        </Box>
         <Box mr="4">{data.me?.username}</Box>
         <Button
           variant="link"
@@ -52,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   }
 
   return (
-    <Flex p={4}>
+    <Flex position="sticky" top="0" p={4} zIndex={2}>
       <Box ml="auto">{body}</Box>
     </Flex>
   );
