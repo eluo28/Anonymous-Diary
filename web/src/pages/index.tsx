@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import { usePostsQuery } from "../generated/graphql";
-import { Box, Button, Flex, Heading, Stack, Text } from "@chakra-ui/core";
+import { useDeletePostMutation, usePostsQuery } from "../generated/graphql";
+import { Box, Button, Flex, Heading, IconButton, Link, Stack, Text } from "@chakra-ui/core";
 import { Layout } from "../components/Layout";
+import NextLink from "next/link"
 
 const Index = () => {
+const [,deletePost] = useDeletePostMutation()
+
   const [variables, setVariables] = useState({
     limit: 15,
     cursor: null as null | string,
@@ -25,10 +28,15 @@ const Index = () => {
         <div>loading...</div>
       ) : (
         <Stack spacing={8}>
-          {data!.posts.posts.map((p) => (
+          {data!.posts.posts.map((p) => !p?null:(
             <Box key={p.id} p={5} shadow="md" borderWidth="1px">
               <Heading>{p.title}</Heading>
               <Text mt={4}>{p.textSnippet}</Text>
+              <IconButton icon="delete" aria-label="Delete Post"
+              onClick={()=>{deletePost({id:p.id})}}
+              ></IconButton>
+
+
             </Box>
           ))}
         </Stack>

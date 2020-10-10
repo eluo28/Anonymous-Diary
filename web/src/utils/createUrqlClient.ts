@@ -12,6 +12,7 @@ import {
   MeDocument,
   LoginMutation,
   RegisterMutation,
+  DeletePostMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 
@@ -68,6 +69,12 @@ const cursorPagination = (): Resolver => {
   };
 };
 
+
+
+
+
+
+
 export const createUrqlClient = (ssrExchange: any) => ({
   url: "http://localhost:4000/graphql",
   fetchOptions: {
@@ -87,6 +94,21 @@ export const createUrqlClient = (ssrExchange: any) => ({
 
       updates: {
         Mutation: {
+          deletePost: (_result, args, cache, info)=>{
+            cache.invalidate({
+              __typename:"Post",
+              id:(args as DeletePostMutationVariables).id
+            })
+          },
+
+          createPost: (_result, args, cache, info) =>{
+            const allFields = cache.inspectFields("Query");
+            const fieldInfos = allFields.filter((info) => info.fieldName === "posts");
+            fieldInfos.forEach((fi)=>{
+              cache.invalidate("Query","posts",fi.arguments);
+            })
+            
+          },
           logout: (_result, args, cache, info) => {
             betterUpdateQuery<LogoutMutation, MeQuery>(
               cache,
