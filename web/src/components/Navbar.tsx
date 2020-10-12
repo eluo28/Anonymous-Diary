@@ -1,16 +1,36 @@
-import { Box, Button, Flex, Link } from "@chakra-ui/core";
-import React from "react";
-import NextLink from "next/link";
 import {
-  useLoginMutation,
-  useLogoutMutation,
-  useMeQuery,
-} from "../generated/graphql";
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Link,
+  useColorMode,
+  Text,
+} from "@chakra-ui/core";
+import NextLink from "next/link";
+import React from "react";
+import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
 
-interface NavbarProps {}
+const MenuItems = (props) => {
+  const { children, isLast, to = "/" } = props;
+  return (
+    <Text
+      mr={isLast ? 0 : 8 }
+    >
+      
+      <NextLink href={to}>
+        <Link>{children}</Link>
+      </NextLink>
+    </Text>
+  );
+};
 
-export const Navbar: React.FC<NavbarProps> = ({}) => {
+export const Navbar: React.FC<{}> = ({}) => {
+  const [show, setShow] = React.useState(false);
+  const toggleMenu = () => setShow(!show);
+
+  const { colorMode, toggleColorMode } = useColorMode();
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
   });
@@ -36,11 +56,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     //user logged in
     body = (
       <Flex>
-        <Box>
-          <NextLink href="/create-post">
-            <Link mr="4">Create Post</Link>
-          </NextLink>
-        </Box>
         <Box mr="4">{data.me?.username}</Box>
         <Button
           variant="link"
@@ -57,8 +72,26 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   }
 
   return (
-    <Flex position="sticky" top="0" p={4} zIndex={2}>
-      <Box ml="auto">{body}</Box>
+    <Flex
+      align="center"
+      justify="space-between"
+      w="100%"
+      mb={8}
+      p={8}
+      bg="red.500"
+    >
+      <Box>Logo</Box>
+
+      <MenuItems to="/login" isLast>
+        Login
+      </MenuItems>
+
+      {/* <IconButton
+        aria-label="Dark Mode"
+        icon={colorMode === 'light' ? 'moon' : 'sun'}
+        onClick={toggleColorMode}
+        variant='ghost'
+      /> */}
     </Flex>
   );
 };

@@ -1,12 +1,11 @@
-import { Box, Flex, Link, Button, Checkbox } from "@chakra-ui/core";
-import { Formik, Form } from "formik";
+import { Box, Button, Checkbox } from "@chakra-ui/core";
+import { Form, Formik } from "formik";
+import { withUrqlClient } from "next-urql";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { InputField } from "../components/InputField";
 import { useCreatePostMutation, useMeQuery } from "../generated/graphql";
-import { useRouter } from "next/router";
-import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import { Layout } from "../components/Layout";
 
 const CreatePost: React.FC<{}> = ({}) => {
   const router = useRouter();
@@ -20,7 +19,7 @@ const CreatePost: React.FC<{}> = ({}) => {
   }, [fetching, data, router]);
 
   return (
-    <Layout variant="small">
+
       <Formik
         initialValues={{ title: "", text: "", public: true }}
         onSubmit={async (values) => {
@@ -64,7 +63,7 @@ const CreatePost: React.FC<{}> = ({}) => {
           </Form>
         )}
       </Formik>
-    </Layout>
+
   );
 };
 

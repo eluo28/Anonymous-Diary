@@ -1,66 +1,97 @@
-import React from "react";
-import { Formik, Form } from "formik";
-import { Box, Button, Flex, Link } from "@chakra-ui/core";
-import { Wrapper } from "../components/Wrapper";
-import { InputField } from "../components/InputField";
-import { useLoginMutation } from "../generated/graphql";
-import { toErrorMap } from "../utils/toErrorMap";
-import { useRouter } from "next/router";
-import { createUrqlClient } from "../utils/createUrqlClient";
+import { Box, Button, Flex, Heading, Link } from "@chakra-ui/core";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { InputField } from "../components/InputField";
+import { useLoginMutation } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { toErrorMap } from "../utils/toErrorMap";
 
-export const Login: React.FC<{}> = ({}) => {
+
+const VARIANT_COLOR = 'teal'
+
+const LoginForm = () => {
   const [, login] = useLoginMutation();
   const router = useRouter();
 
   return (
-    <Wrapper variant="small">
-      <Formik
-        initialValues={{ usernameOrEmail: "", password: "" }}
-        onSubmit={async (values, { setErrors }) => {
-          const response = await login(values);
-          if (response.data?.login.errors) {
-            setErrors(toErrorMap(response.data.login.errors));
-          } else if (response.data?.login.user) {
-            //login worked
-            router.push("/");
-          }
-        }}
+<Box my={8} textAlign='left'>
+
+  <Formik
+    initialValues={{ usernameOrEmail: "", password: "" }}
+    onSubmit={async (values, { setErrors }) => {
+      const response = await login(values);
+      if (response.data?.login.errors) {
+        setErrors(toErrorMap(response.data.login.errors));
+      } else if (response.data?.login.user) {
+        //login worked
+        router.push("/");
+      }
+    }}
+  >
+    {({ isSubmitting }) => (
+      <Form>
+        <InputField
+          name="usernameOrEmail"
+          placeholder="Enter your username or email"
+          label="Username/Email"
+        ></InputField>
+        <Box mt={4}>
+          <InputField
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            label="Password"
+          ></InputField>
+        </Box>
+        <Flex mt="4">
+          <NextLink href="/forgot-password">
+            <Link ml="auto" color={`${VARIANT_COLOR}.500`}>Forgot Password?</Link>
+          </NextLink>
+        </Flex>
+        <Button
+          type="submit"
+          mt={4}
+          isLoading={isSubmitting}
+          variantColor={VARIANT_COLOR}
+          width = "full"
+        >
+          Login
+        </Button>
+      </Form>
+    )}
+  </Formik>
+  </Box>
+  );
+};
+
+
+
+
+
+export const Login: React.FC<{}> = ({}) => {
+
+  return (
+
+    <Flex minHeight='100vh' width='full' align='center' justifyContent='center'>
+      <Box 
+        borderWidth={1}
+        px={4}
+        width='90%'
+        maxWidth='500px'
+        borderRadius={4}
+        textAlign='center'
+        boxShadow='lg'
       >
-        {({ isSubmitting }) => (
-          <Form>
-            <InputField
-              name="usernameOrEmail"
-              placeholder="Username or Email"
-              label="Username or Email"
-            ></InputField>
-            <Box mt={4}>
-              <InputField
-                name="password"
-                type="password"
-                placeholder="password"
-                label="Password"
-              ></InputField>
-            </Box>
-            <Flex mt="2">
-              <NextLink href="/forgot-password">
-                <Link ml="auto">Forgot Password?</Link>
-              </NextLink>
-            </Flex>
-            <Button
-              type="submit"
-              mt={4}
-              isLoading={isSubmitting}
-              variantColor="teal"
-              variant="outline"
-            >
-              Login
-            </Button>
-          </Form>
-        )}
-      </Formik>
-    </Wrapper>
+        <Box p={4}>
+          <Heading>Login to Your Account</Heading>
+          <LoginForm />
+        </Box>
+      </Box>
+    </Flex>
+
   );
 };
 

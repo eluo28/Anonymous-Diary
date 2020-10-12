@@ -1,14 +1,12 @@
-import React, { useState } from "react";
-import { Navbar } from "../components/Navbar";
+import { Box, Button, Flex, Heading, IconButton, Stack, Text } from "@chakra-ui/core";
 import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
+import React, { useState } from "react";
 import { useDeletePostMutation, usePostsQuery } from "../generated/graphql";
-import { Box, Button, Flex, Heading, IconButton, Link, Stack, Text } from "@chakra-ui/core";
-import { Layout } from "../components/Layout";
-import NextLink from "next/link"
+import { createUrqlClient } from "../utils/createUrqlClient";
+import {ExploreLayout} from "../components/ExploreLayout"
 
-const Index = () => {
-const [,deletePost] = useDeletePostMutation()
+const Posts = ()=>{
+  const [,deletePost] = useDeletePostMutation()
 
   const [variables, setVariables] = useState({
     limit: 15,
@@ -21,9 +19,8 @@ const [,deletePost] = useDeletePostMutation()
   if (!fetching && !data) {
     return <div>query failed</div>;
   }
-
-  return (
-    <Layout>
+  return(
+    <Box>
       {!data && fetching ? (
         <div>loading...</div>
       ) : (
@@ -59,7 +56,25 @@ const [,deletePost] = useDeletePostMutation()
           </Button>
         </Flex>
       ) : null}
-    </Layout>
+    </Box>
+  )
+
+}
+
+
+const Index = () => {
+
+
+  return (
+
+    <ExploreLayout>
+
+    <Posts></Posts>
+
+    </ExploreLayout>
+
+
+    
   );
 };
 export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
