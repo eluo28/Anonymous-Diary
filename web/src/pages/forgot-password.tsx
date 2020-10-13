@@ -34,7 +34,7 @@ return (
             type="submit"
             mt={4}
             isLoading={isSubmitting}
-            variantColor="teal"
+            colorScheme="teal"
             variant="outline"
           >
             Send Reset Email

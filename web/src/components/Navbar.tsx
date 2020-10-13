@@ -7,7 +7,9 @@ import {
   useColorMode,
   Text,
   Icon,
+  Collapse,
 } from "@chakra-ui/core";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
 import React from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
@@ -37,7 +39,8 @@ export const Navbar: React.FC<{}> = ({}) => {
       <Box mr={6}>Logo</Box>
 
       <Box display={["block", "none"]} onClick={toggleMenu}>
-        <Icon name="triangle-down" color="red.500" />
+        <Text>hi</Text>
+        <HamburgerIcon />
       </Box>
 
       <Box
@@ -46,21 +49,11 @@ export const Navbar: React.FC<{}> = ({}) => {
         flexGrow={1}
         alignItems="center"
       >
-        <Text mr={4} mt={[4, 0]}>
-          Explore
-        </Text>
-
-        <IconButton
-          mt={[4, 0]}
-          aria-label="Dark Mode"
-          icon={colorMode === "light" ? "moon" : "sun"}
-          onClick={toggleColorMode}
-          variant="ghost"
-        />
+        <Text mr={4}>Explore</Text>
       </Box>
 
       {!data?.me ? (
-        <Box display={[show ? "block" : "none", "flex"]}>
+        <Box display="flex">
           <NextLink href="/login">
             <Button bg="transparent" border="1px" mr={6}>
               Login
