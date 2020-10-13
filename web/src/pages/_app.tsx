@@ -3,7 +3,6 @@ import React from "react";
 import theme from "../theme";
 
 
-
 function MyApp({ Component, pageProps }) {
   return (
 

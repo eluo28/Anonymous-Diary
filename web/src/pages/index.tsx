@@ -5,6 +5,7 @@ import { useDeletePostMutation, usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import {ExploreLayout} from "../components/ExploreLayout"
 
+
 const Posts = ()=>{
   const [,deletePost] = useDeletePostMutation()
 
@@ -69,7 +70,7 @@ const Index = () => {
 
     <ExploreLayout>
 
-    <Posts></Posts>
+    <Posts/>
 
     </ExploreLayout>
 

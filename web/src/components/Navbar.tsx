@@ -6,92 +6,93 @@ import {
   Link,
   useColorMode,
   Text,
+  Icon,
 } from "@chakra-ui/core";
 import NextLink from "next/link";
 import React from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
 
-const MenuItems = (props) => {
-  const { children, isLast, to = "/" } = props;
-  return (
-    <Text
-      mr={isLast ? 0 : 8 }
-    >
-      
-      <NextLink href={to}>
-        <Link>{children}</Link>
-      </NextLink>
-    </Text>
-  );
-};
-
 export const Navbar: React.FC<{}> = ({}) => {
   const [show, setShow] = React.useState(false);
   const toggleMenu = () => setShow(!show);
 
   const { colorMode, toggleColorMode } = useColorMode();
-  const [{ data, fetching }] = useMeQuery({
+  const [{ data }] = useMeQuery({
     pause: isServer(),
   });
-  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
-
-  let body = null;
-
-  if (fetching) {
-    //data is loading
-  } else if (!data?.me) {
-    //user not logged in
-    body = (
-      <>
-        <NextLink href="/login">
-          <Link mr="4">Login</Link>
-        </NextLink>
-        <NextLink href="/register">
-          <Link mr="4">Register</Link>
-        </NextLink>
-      </>
-    );
-  } else {
-    //user logged in
-    body = (
-      <Flex>
-        <Box mr="4">{data.me?.username}</Box>
-        <Button
-          variant="link"
-          mr="4"
-          onClick={() => {
-            logout();
-          }}
-          isLoading={logoutFetching}
-        >
-          Logout
-        </Button>
-      </Flex>
-    );
-  }
+  const [, logout] = useLogoutMutation();
 
   return (
     <Flex
+      as="nav"
       align="center"
       justify="space-between"
+      wrap="wrap"
+      bg="teal.500"
       w="100%"
       mb={8}
       p={8}
-      bg="red.500"
     >
-      <Box>Logo</Box>
+      <Box mr={6}>Logo</Box>
 
-      <MenuItems to="/login" isLast>
-        Login
-      </MenuItems>
+      <Box display={["block", "none"]} onClick={toggleMenu}>
+        <Icon name="triangle-down" color="red.500" />
+      </Box>
 
-      {/* <IconButton
-        aria-label="Dark Mode"
-        icon={colorMode === 'light' ? 'moon' : 'sun'}
-        onClick={toggleColorMode}
-        variant='ghost'
-      /> */}
+      <Box
+        display={[show ? "block" : "none", "flex"]}
+        width={["full", "auto"]}
+        flexGrow={1}
+        alignItems="center"
+      >
+        <Text mr={4} mt={[4, 0]}>
+          Explore
+        </Text>
+
+        <IconButton
+          mt={[4, 0]}
+          aria-label="Dark Mode"
+          icon={colorMode === "light" ? "moon" : "sun"}
+          onClick={toggleColorMode}
+          variant="ghost"
+        />
+      </Box>
+
+      {!data?.me ? (
+        <Box display={[show ? "block" : "none", "flex"]}>
+          <NextLink href="/login">
+            <Button bg="transparent" border="1px" mr={6}>
+              Login
+            </Button>
+          </NextLink>
+
+          <NextLink href="/register">
+            <Button bg="transparent" border="1px">
+              Register
+            </Button>
+          </NextLink>
+        </Box>
+      ) : (
+        <Box
+          display={[show ? "block" : "none", "flex"]}
+          alignItems="center"
+          mt={[4, 0]}
+        >
+          <Text mr={6}>{data.me?.username}</Text>
+
+          <Button
+            mt={[4, 0]}
+            bg="transparent"
+            border="1px"
+            onClick={() => {
+              logout();
+            }}
+          >
+            Logout
+          </Button>
+        </Box>
+      )}
     </Flex>
   );
 };
