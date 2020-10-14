@@ -55,7 +55,7 @@ const LoginForm = () => {
               type="submit"
               mt={4}
               isLoading={isSubmitting}
-              variantColor={VARIANT_COLOR}
+              colorScheme={VARIANT_COLOR}
               width="full"
             >
               Login

@@ -1,19 +1,22 @@
-import { theme as chakraTheme } from "@chakra-ui/core";
+import { theme as ChakraTheme, extendTheme } from "@chakra-ui/core";
+import { createBreakpoints } from "@chakra-ui/theme-tools";
 import { createIcon } from "@chakra-ui/icon";
 
-const fonts = {
-  ...chakraTheme.fonts,
-};
+const breakpoints = createBreakpoints({
+  sm: "40em",
+  md: "52em",
+  lg: "64em",
+  xl: "80em",
+});
 
-const breakpoints = ["40em", "52em", "64em", "80em"];
-
-const theme = {
-  ...chakraTheme,
-  colors: {
-    ...chakraTheme.colors,
+const theme = extendTheme({
+  ...ChakraTheme,
+  breakpoints,
+  fonts: {
+    body: "Erato,serif",
+    heading: "Erato,serif",
+    mono: "Erato,serif",
   },
-  fonts,
-  breakpoints: ["40em", "52em", "64em", "80em"],
-};
+});
 
 export default theme;
