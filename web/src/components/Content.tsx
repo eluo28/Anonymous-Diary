@@ -11,7 +11,7 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/core";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue } from "framer-motion";
 import { usePostsQuery } from "../generated/graphql";
 
 const MotionBox = motion.custom(Box);
@@ -26,27 +26,47 @@ export const Content: React.FC<{}> = ({}) => {
     variables,
   });
 
-  const bg = useColorModeValue("gray.200", "red.900")
-  const color = useColorModeValue("white", "gray.800")
-  const text = useColorModeValue("black", "white")
+  const bg = useColorModeValue("gray.800", "gray.400");
+  const color = useColorModeValue("white", "gray.800");
+  const text = useColorModeValue("black", "gray.100");
 
   return (
-    <Box flex="1" height="100vh" overflow="scroll" bg={bg} width="50vw">
+    <Box
+      flex="1"
+      height="100vh"
+      overflowY="scroll"
+      bg={bg}
+      width="50vw"
+      overflowX="hidden"
+    >
       {!data && fetching ? (
         <div>loading...</div>
       ) : (
         <VStack
-          divider={<StackDivider borderColor="gray.200" />}
+          divider={<StackDivider borderColor={color} borderWidth="3px" />}
           spacing={4}
-          align="stretch"
-          m={10}
         >
           {data!.posts.posts.map((p) =>
             !p ? null : (
-              <Box key={p.id} p={5} shadow="md" borderWidth="1px" bg={color} color={text}>
-                <Heading>{p.title}</Heading>
+              <MotionBox
+                key={p.id}
+                p={5}
+                bg={color}
+                color={text}
+                minHeight="75vh"
+                width="30vw"
+                mx="auto"
+                my={10}
+              >
+                <Heading borderBottom="2px" textAlign="center" mb={2}>
+                  {p.title}
+                </Heading>
+
+                <Text textAlign="center">
+                  {new Date(parseInt(p.createdAt)).toLocaleDateString()}
+                </Text>
                 <Text mt={4}>{p.textSnippet}</Text>
-              </Box>
+              </MotionBox>
             )
           )}
 

@@ -7,6 +7,7 @@ import {
   Spacer,
   Text,
   useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/core";
 import { motion } from "framer-motion";
 import React from "react";
@@ -27,6 +28,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
     pause: isServer(),
   });
   const [, logout] = useLogoutMutation();
+  const text = useColorModeValue("white", "black");
 
   return (
     <MotionBox height="100vh" width="50vw">
@@ -69,9 +71,9 @@ export const Sidebar: React.FC<{}> = ({}) => {
               position="absolute"
               left="50vw"
               top="45vh"
-              ml="-55px"
               transform="rotate(90deg)"
               fontSize="xl"
+              ml="-55px"
             >
               <Link
                 onClick={() => {
@@ -80,6 +82,22 @@ export const Sidebar: React.FC<{}> = ({}) => {
               >
                 Logout
               </Link>
+            </Flex>
+
+            <Flex
+              position="absolute"
+              left="50vw"
+              top="45vh"
+              transform="rotate(-90deg)"
+              fontSize="xl"
+            >
+              <NextLink href="/my-diary">
+                <Link
+                  color={text}
+                >
+                  My Diary
+                </Link>
+              </NextLink>
             </Flex>
           </>
         )}
@@ -97,8 +115,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
         <Flex position="absolute" left="50vw" ml="-50px" bottom="4vh">
           <IconButton
             colorScheme="black"
-            _focus={{ outline:"none" }}
-            
+            _focus={{ outline: "none" }}
             aria-label="Dark Mode"
             variant="ghost"
             onClick={toggleColorMode}
