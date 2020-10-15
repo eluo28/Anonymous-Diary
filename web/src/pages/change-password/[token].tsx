@@ -62,7 +62,7 @@ export const ChangePassword: NextPage = () => {
               type="submit"
               mt={4}
               isLoading={isSubmitting}
-              variantColor="teal"
+              colorScheme="teal"
               variant="outline"
             >
               Change Password

@@ -8,6 +8,7 @@ import {
   Stack,
   StackDivider,
   Text,
+  useColorModeValue,
   VStack,
 } from "@chakra-ui/core";
 import { AnimatePresence, motion } from "framer-motion";
@@ -25,8 +26,12 @@ export const Content: React.FC<{}> = ({}) => {
     variables,
   });
 
+  const bg = useColorModeValue("gray.200", "red.900")
+  const color = useColorModeValue("white", "gray.800")
+  const text = useColorModeValue("black", "white")
+
   return (
-    <Box flex="1" height="100vh" overflow="scroll" bg="gray.200">
+    <Box flex="1" height="100vh" overflow="scroll" bg={bg} width="50vw">
       {!data && fetching ? (
         <div>loading...</div>
       ) : (
@@ -38,7 +43,7 @@ export const Content: React.FC<{}> = ({}) => {
         >
           {data!.posts.posts.map((p) =>
             !p ? null : (
-              <Box key={p.id} p={5} shadow="md" borderWidth="1px" bg="white">
+              <Box key={p.id} p={5} shadow="md" borderWidth="1px" bg={color} color={text}>
                 <Heading>{p.title}</Heading>
                 <Text mt={4}>{p.textSnippet}</Text>
               </Box>

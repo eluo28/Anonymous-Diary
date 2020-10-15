@@ -1,6 +1,19 @@
-import { Box, Text } from "@chakra-ui/core";
+import {
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Link,
+  Spacer,
+  Text,
+  useColorMode,
+} from "@chakra-ui/core";
 import { motion } from "framer-motion";
 import React from "react";
+import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import { isServer } from "../utils/isServer";
+import NextLink from "next/link";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 const MotionBox = motion.custom(Box);
 const variants = {
@@ -9,15 +22,14 @@ const variants = {
 };
 
 export const Sidebar: React.FC<{}> = ({}) => {
+  const { colorMode, toggleColorMode } = useColorMode();
+  const [{ data }] = useMeQuery({
+    pause: isServer(),
+  });
+  const [, logout] = useLogoutMutation();
+
   return (
-    <MotionBox
-      height="100vh"
-      animate={{
-        width: "50%",
-      }}
-      // @ts-expect-error
-      transition={{ duration: 1 }}
-    >
+    <MotionBox height="100vh" width="50vw">
       <MotionBox
         ml="16"
         mt="10"
@@ -29,12 +41,70 @@ export const Sidebar: React.FC<{}> = ({}) => {
       >
         <Text>Anonymous Diary</Text>
 
+        {!data?.me ? (
+          <Flex
+            position="absolute"
+            left="50vw"
+            top="45vh"
+            ml="-90px"
+            transform="rotate(90deg)"
+            fontSize="xl"
+          >
+            <NextLink href="/login">
+              <Link>Login</Link>
+            </NextLink>
+
+            <Box>&nbsp;/&nbsp;</Box>
+
+            <NextLink href="/register">
+              <Link>Register</Link>
+            </NextLink>
+          </Flex>
+        ) : (
+          //   <Text mr={6}>{data.me?.username}</Text>
+          <>
+            <Text mt="4">{data.me?.username}</Text>
+
+            <Flex
+              position="absolute"
+              left="50vw"
+              top="45vh"
+              ml="-55px"
+              transform="rotate(90deg)"
+              fontSize="xl"
+            >
+              <Link
+                onClick={() => {
+                  logout();
+                }}
+              >
+                Logout
+              </Link>
+            </Flex>
+          </>
+        )}
+
         <Box position="absolute" bottom="10">
           <Text fontSize="4xl" mb="32">
             Preserve Ideas
           </Text>
-          <Text fontSize="md">me@edwinluo.com</Text>
+
+          <Box fontSize="md">
+            <Text>me@edwinluo.com</Text>
+          </Box>
         </Box>
+
+        <Flex position="absolute" left="50vw" ml="-50px" bottom="4vh">
+          <IconButton
+            colorScheme="black"
+            _focus={{ outline:"none" }}
+            
+            aria-label="Dark Mode"
+            variant="ghost"
+            onClick={toggleColorMode}
+            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          />
+        </Flex>
       </MotionBox>
     </MotionBox>
   );
