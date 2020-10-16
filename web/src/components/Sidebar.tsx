@@ -10,14 +10,14 @@ import {
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/core";
-import { motion } from "framer-motion";
+import { motion, MotionProps } from "framer-motion";
 import React from "react";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
 import NextLink from "next/link";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
-const MotionBox = motion.custom<Omit<BoxProps, keyof MotionsProps>>(Box)
+const MotionBox = motion.custom<Omit<BoxProps, keyof MotionProps>>(Box);
 const variants = {
   visible: { opacity: 1 },
   hidden: { opacity: 0 },
@@ -36,7 +36,6 @@ export const Sidebar: React.FC<{}> = ({}) => {
       height="100vh"
       initial={{ width: "0%" }}
       animate={{ width: "50vw" }}
-
       transition={{ duration: 1 }}
     >
       <MotionBox
@@ -45,11 +44,22 @@ export const Sidebar: React.FC<{}> = ({}) => {
         initial="hidden"
         animate="visible"
         variants={variants}
-     
         transition={{ duration: 2 }}
       >
-        <Text fontSize="4xl">ANONYMOUS</Text>
-        
+        <Flex>
+          <Text
+            fontSize="4xl"
+            sx={{ textOrientation: "upright", writingMode: "vertical-lr" }}
+          >
+            ANONYMOUS
+          </Text>
+          <Text
+            fontSize="4xl"
+            sx={{ textOrientation: "upright", writingMode: "vertical-lr" }}
+          >
+            DIARY
+          </Text>
+        </Flex>
 
         {!data?.me ? (
           <Flex
