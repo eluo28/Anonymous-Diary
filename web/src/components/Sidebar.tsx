@@ -1,5 +1,6 @@
 import {
   Box,
+  BoxProps,
   Button,
   Flex,
   IconButton,
@@ -16,7 +17,7 @@ import { isServer } from "../utils/isServer";
 import NextLink from "next/link";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
-const MotionBox = motion.custom(Box);
+const MotionBox = motion.custom<Omit<BoxProps, keyof MotionsProps>>(Box)
 const variants = {
   visible: { opacity: 1 },
   hidden: { opacity: 0 },
@@ -31,17 +32,24 @@ export const Sidebar: React.FC<{}> = ({}) => {
   const text = useColorModeValue("white", "black");
 
   return (
-    <MotionBox height="100vh" width="50vw">
+    <MotionBox
+      height="100vh"
+      initial={{ width: "0%" }}
+      animate={{ width: "50vw" }}
+
+      transition={{ duration: 1 }}
+    >
       <MotionBox
         ml="16"
         mt="10"
         initial="hidden"
         animate="visible"
         variants={variants}
-        // @ts-expect-error
-        transition={{ duration: 1 }}
+     
+        transition={{ duration: 2 }}
       >
-        <Text>Anonymous Diary</Text>
+        <Text fontSize="4xl">ANONYMOUS</Text>
+        
 
         {!data?.me ? (
           <Flex
@@ -92,19 +100,16 @@ export const Sidebar: React.FC<{}> = ({}) => {
               fontSize="xl"
             >
               <NextLink href="/my-diary">
-                <Link
-                  color={text}
-                >
-                  My Diary
-                </Link>
+                <Link color={text}>My Diary</Link>
               </NextLink>
             </Flex>
           </>
         )}
 
         <Box position="absolute" bottom="10">
-          <Text fontSize="4xl" mb="32">
-            Preserve Ideas
+          <Text fontSize="4xl">Preserve Ideas</Text>
+          <Text fontSize="2xl" mb="32" fontStyle="italic">
+            Explore Lives
           </Text>
 
           <Box fontSize="md">

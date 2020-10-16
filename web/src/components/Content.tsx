@@ -31,12 +31,11 @@ export const Content: React.FC<{}> = ({}) => {
   const text = useColorModeValue("black", "gray.100");
 
   return (
-    <Box
+    <MotionBox
       flex="1"
       height="100vh"
       overflowY="scroll"
       bg={bg}
-      width="50vw"
       overflowX="hidden"
     >
       {!data && fetching ? (
@@ -58,14 +57,16 @@ export const Content: React.FC<{}> = ({}) => {
                 mx="auto"
                 my={10}
               >
-                <Heading borderBottom="2px" textAlign="center" mb={2}>
+                <Heading borderBottom="2px" textAlign="center" mb={1} pb={1}>
                   {p.title}
                 </Heading>
 
                 <Text textAlign="center">
                   {new Date(parseInt(p.createdAt)).toLocaleDateString()}
                 </Text>
-                <Text mt={4}>{p.textSnippet}</Text>
+                <Text mt={4} fontSize="lg">
+                  {p.textSnippet}
+                </Text>
               </MotionBox>
             )
           )}
@@ -88,6 +89,6 @@ export const Content: React.FC<{}> = ({}) => {
           ) : null}
         </VStack>
       )}
-    </Box>
+    </MotionBox>
   );
 };
