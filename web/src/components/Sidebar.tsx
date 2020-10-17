@@ -17,10 +17,39 @@ import { isServer } from "../utils/isServer";
 import NextLink from "next/link";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
+const anonymousText = Array.from("ANONYMOUS");
+const diaryText = Array.from("DIARY");
+
 const MotionBox = motion.custom<Omit<BoxProps, keyof MotionProps>>(Box);
 const variants = {
   visible: { opacity: 1 },
   hidden: { opacity: 0 },
+};
+
+const letterVariants = {
+  before: {
+    opacity: 0,
+    x: -20,
+    transition: {
+      type: "tween",
+      damping: 16,
+      stiffness: 200,
+    },
+  },
+  after: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      type: "tween",
+      damping: 16,
+      stiffness: 200,
+    },
+  },
+};
+
+const containerVariants = {
+  before: {},
+  after: { transition: { staggerChildren: 0.2 } },
 };
 
 export const Sidebar: React.FC<{}> = ({}) => {
@@ -46,7 +75,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
         variants={variants}
         transition={{ duration: 2 }}
       >
-        <Flex>
+        {/* <Flex>
           <Text
             fontSize="4xl"
             sx={{ textOrientation: "upright", writingMode: "vertical-lr" }}
@@ -59,7 +88,30 @@ export const Sidebar: React.FC<{}> = ({}) => {
           >
             DIARY
           </Text>
-        </Flex>
+        </Flex> */}
+
+        <MotionBox
+          variants={containerVariants}
+          initial={"before"}
+          animate={"after"}
+          transition={{ duration: "2" }}
+          display="flex"
+        >
+          <Box>
+            {anonymousText.map((letter, index) => (
+              <MotionBox key={index} variants={letterVariants} fontSize="3xl">
+                {letter}
+              </MotionBox>
+            ))}
+          </Box>
+          <Box ml="10">
+            {diaryText.map((letter, index) => (
+              <MotionBox key={index} variants={letterVariants} fontSize="3xl">
+                {letter}
+              </MotionBox>
+            ))}
+          </Box>
+        </MotionBox>
 
         {!data?.me ? (
           <Flex
@@ -83,7 +135,15 @@ export const Sidebar: React.FC<{}> = ({}) => {
         ) : (
           //   <Text mr={6}>{data.me?.username}</Text>
           <>
-            <Text mt="4">{data.me?.username}</Text>
+            <Flex
+              position="absolute"
+              left="50vw"
+              fontSize="xl"
+              ml="-90px"
+              top="10"
+            >
+              <Text>{data.me?.username}</Text>
+            </Flex>
 
             <Flex
               position="absolute"
