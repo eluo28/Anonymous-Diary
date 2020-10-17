@@ -16,12 +16,7 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 import { ExploreLayout } from "../components/ExploreLayout";
 import { DeleteIcon } from "@chakra-ui/icons";
 
-const Posts = () => {
-  const [, deletePost] = useDeletePostMutation();
 
-
-  
-};
 
 const Index = () => {
   return (

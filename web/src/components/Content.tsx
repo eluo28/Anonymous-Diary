@@ -16,6 +16,11 @@ import { usePostsQuery } from "../generated/graphql";
 
 const MotionBox = motion.custom(Box);
 
+const variants = {
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 },
+};
+
 export const Content: React.FC<{}> = ({}) => {
   const [variables, setVariables] = useState({
     limit: 10,
@@ -26,7 +31,7 @@ export const Content: React.FC<{}> = ({}) => {
     variables,
   });
 
-  const bg = useColorModeValue("gray.800", "gray.400");
+  const bg = useColorModeValue("gray.300", "gray.700");
   const color = useColorModeValue("white", "gray.800");
   const text = useColorModeValue("black", "gray.100");
 
@@ -55,7 +60,7 @@ export const Content: React.FC<{}> = ({}) => {
                 minHeight="75vh"
                 width="30vw"
                 mx="auto"
-                my={10}
+                my={16}
               >
                 <Heading borderBottom="2px" textAlign="center" mb={1} pb={1}>
                   {p.title}

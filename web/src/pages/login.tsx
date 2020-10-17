@@ -1,4 +1,11 @@
-import { Box, Button, Flex, Heading, Link } from "@chakra-ui/core";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Link,
+  useColorModeValue,
+} from "@chakra-ui/core";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
@@ -9,7 +16,7 @@ import { useLoginMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { toErrorMap } from "../utils/toErrorMap";
 
-const VARIANT_COLOR = "teal";
+const VARIANT_COLOR = "gray";
 
 const LoginForm = () => {
   const [, login] = useLoginMutation();
@@ -46,16 +53,14 @@ const LoginForm = () => {
             </Box>
             <Flex mt="4">
               <NextLink href="/forgot-password">
-                <Link ml="auto" color={`${VARIANT_COLOR}.500`}>
-                  Forgot Password?
-                </Link>
+                <Link ml="auto">Forgot Password?</Link>
               </NextLink>
             </Flex>
             <Button
               type="submit"
               mt={4}
               isLoading={isSubmitting}
-              colorScheme={VARIANT_COLOR}
+              colorScheme="gray"
               width="full"
             >
               Login
@@ -68,8 +73,17 @@ const LoginForm = () => {
 };
 
 export const Login: React.FC<{}> = ({}) => {
+  const bg = useColorModeValue("gray.300", "gray.700");
+  const bg2 = useColorModeValue("white", "gray.900");
+
   return (
-    <Flex minHeight="100vh" width="full" align="center" justifyContent="center">
+    <Flex
+      minHeight="100vh"
+      width="full"
+      align="center"
+      justifyContent="center"
+      bg={bg}
+    >
       <Box
         borderWidth={1}
         px={4}
@@ -78,6 +92,7 @@ export const Login: React.FC<{}> = ({}) => {
         borderRadius={4}
         textAlign="center"
         boxShadow="lg"
+        bg={bg2}
       >
         <Box p={4}>
           <Heading>Login</Heading>

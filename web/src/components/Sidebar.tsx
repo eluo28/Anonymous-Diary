@@ -49,7 +49,7 @@ const letterVariants = {
 
 const containerVariants = {
   before: {},
-  after: { transition: { staggerChildren: 0.2 } },
+  after: { transition: { staggerChildren: 0.15 } },
 };
 
 export const Sidebar: React.FC<{}> = ({}) => {
@@ -58,7 +58,6 @@ export const Sidebar: React.FC<{}> = ({}) => {
     pause: isServer(),
   });
   const [, logout] = useLogoutMutation();
-  const text = useColorModeValue("white", "black");
 
   return (
     <MotionBox
@@ -73,28 +72,12 @@ export const Sidebar: React.FC<{}> = ({}) => {
         initial="hidden"
         animate="visible"
         variants={variants}
-        transition={{ duration: 2 }}
+        transition={{ duration: 3 }}
       >
-        {/* <Flex>
-          <Text
-            fontSize="4xl"
-            sx={{ textOrientation: "upright", writingMode: "vertical-lr" }}
-          >
-            ANONYMOUS
-          </Text>
-          <Text
-            fontSize="4xl"
-            sx={{ textOrientation: "upright", writingMode: "vertical-lr" }}
-          >
-            DIARY
-          </Text>
-        </Flex> */}
-
         <MotionBox
           variants={containerVariants}
           initial={"before"}
           animate={"after"}
-          transition={{ duration: "2" }}
           display="flex"
         >
           <Box>
@@ -170,7 +153,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
               fontSize="xl"
             >
               <NextLink href="/my-diary">
-                <Link color={text}>My Diary</Link>
+                <Link color="gray.200">My Diary</Link>
               </NextLink>
             </Flex>
           </>
