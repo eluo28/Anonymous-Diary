@@ -1,22 +1,31 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { Box, Button, Flex, Heading } from "@chakra-ui/core";
+import { Box, Button, Flex, Heading, useColorModeValue } from "@chakra-ui/core";
 import { InputField } from "../components/InputField";
 import { useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { motion } from "framer-motion";
 
-const VARIANT_COLOR = 'teal'
+const MotionBox = motion.custom(Box);
 
-const RegisterForm = ()=>{
+const pageVariants = {
+  pageInitial: {
+    opacity: 0,
+  },
+  pageAnimate: {
+    opacity: 1,
+  },
+};
 
+const RegisterForm = () => {
   const [, register] = useRegisterMutation();
   const router = useRouter();
-return( 
-  <Box my={8} textAlign='left'>
-   <Formik
+  return (
+    <Box my={8} textAlign="left">
+      <Formik
         initialValues={{ email: "", username: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
           const response = await register({ options: values });
@@ -56,39 +65,50 @@ return(
               type="submit"
               mt={4}
               isLoading={isSubmitting}
-              variantColor={VARIANT_COLOR}
-              width = "full"
+              colorScheme="gray"
+              width="full"
             >
               Register
             </Button>
           </Form>
         )}
       </Formik>
-      </Box>);
-}
-
-
+    </Box>
+  );
+};
 
 export const Register: React.FC<{}> = ({}) => {
 
-
+  const bg = useColorModeValue("gray.300", "gray.700");
+  const bg2 = useColorModeValue("white", "gray.900");
   return (
-    <Flex minHeight='100vh' width='full' align='center' justifyContent='center'>
-      <Box 
+    <MotionBox
+      minHeight="100vh"
+      width="full"
+      alignItems="center"
+      justifyContent="center"
+      display="flex"
+      initial="pageInitial"
+      animate="pageAnimate"
+      variants={pageVariants}
+      bg={bg}
+    >
+      <Box
         borderWidth={1}
         px={4}
-        width='90%'
-        maxWidth='500px'
+        width="90%"
+        maxWidth="500px"
         borderRadius={4}
-        textAlign='center'
-        boxShadow='lg'
+        textAlign="center"
+        boxShadow="lg"
+        bg={bg2}
       >
         <Box p={4}>
           <Heading>Register</Heading>
           <RegisterForm />
         </Box>
       </Box>
-    </Flex>
+    </MotionBox>
   );
 };
 

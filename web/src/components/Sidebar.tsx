@@ -10,7 +10,7 @@ import {
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/core";
-import { motion, MotionProps } from "framer-motion";
+import { AnimatePresence, motion, MotionProps } from "framer-motion";
 import React from "react";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
@@ -65,6 +65,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
       initial={{ width: "0%" }}
       animate={{ width: "50vw" }}
       transition={{ duration: 1 }}
+      exit={{ opacity: 0, y: -20 }}
     >
       <MotionBox
         ml="16"
@@ -153,7 +154,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
               fontSize="xl"
             >
               <NextLink href="/my-diary">
-                <Link color="gray.200">My Diary</Link>
+                <Link>My Diary</Link>
               </NextLink>
             </Flex>
           </>

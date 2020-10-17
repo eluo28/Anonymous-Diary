@@ -7,6 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/core";
 import { Form, Formik } from "formik";
+import { motion } from "framer-motion";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -16,7 +17,16 @@ import { useLoginMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { toErrorMap } from "../utils/toErrorMap";
 
-const VARIANT_COLOR = "gray";
+const MotionBox = motion.custom(Box);
+
+const pageVariants = {
+  pageInitial: {
+    opacity: 0,
+  },
+  pageAnimate: {
+    opacity: 1,
+  },
+};
 
 const LoginForm = () => {
   const [, login] = useLoginMutation();
@@ -77,10 +87,14 @@ export const Login: React.FC<{}> = ({}) => {
   const bg2 = useColorModeValue("white", "gray.900");
 
   return (
-    <Flex
+    <MotionBox
+      initial="pageInitial"
+      animate="pageAnimate"
+      variants={pageVariants}
       minHeight="100vh"
       width="full"
-      align="center"
+      display="flex"
+      alignItems="center"
       justifyContent="center"
       bg={bg}
     >
@@ -99,7 +113,7 @@ export const Login: React.FC<{}> = ({}) => {
           <LoginForm />
         </Box>
       </Box>
-    </Flex>
+    </MotionBox>
   );
 };
 
