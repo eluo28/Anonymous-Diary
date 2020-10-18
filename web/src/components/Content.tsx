@@ -35,6 +35,7 @@ export const Content: React.FC<{}> = ({}) => {
       overflowY="scroll"
       bg={bg}
       overflowX="hidden"
+      pt={{ base: "75px", md: "0" }}
     >
       {!data && fetching ? (
         <div>loading...</div>
@@ -59,7 +60,11 @@ export const Content: React.FC<{}> = ({}) => {
                 <Text textAlign="center">
                   {new Date(parseInt(p.createdAt)).toLocaleDateString()}
                 </Text>
-                <Text mt={4} fontSize="lg">
+                <Text
+                  mt={4}
+                  fontSize="lg"
+                  textAlign="center"
+                >
                   {p.textSnippet}
                 </Text>
               </Box>

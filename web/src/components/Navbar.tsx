@@ -9,6 +9,7 @@ import {
   Link,
   Text,
   useColorMode,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/core";
 import { CloseIcon, HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
@@ -25,13 +26,20 @@ export const Navbar: React.FC<{}> = ({}) => {
   });
   const [, logout] = useLogoutMutation();
 
+  const bg = useColorModeValue("white", "gray.900");
+
   return (
     <Flex
       as="nav"
       align="center"
       justify="space-between"
+      position="absolute"
+      width="100%"
+      top="0"
       wrap="wrap"
-      padding="1.5rem"
+      height="75px"
+      bg={bg}
+      px="5"
     >
       <Box fontSize="xl">Anonymous Diary</Box>
 
@@ -82,11 +90,16 @@ export const Navbar: React.FC<{}> = ({}) => {
                     </NextLink>
                   </Box>
                   <IconButton
+                    mb="8"
                     aria-label="close"
                     onClick={onClose}
                     icon={<CloseIcon />}
                     bg="transparent"
                   />
+
+                  <Box bottom="10" position="absolute" width="full" left="0">
+                    <Text fontSize="md">me@edwinluo.com</Text>
+                  </Box>
                 </Box>
               ) : (
                 <Box>
@@ -120,6 +133,10 @@ export const Navbar: React.FC<{}> = ({}) => {
                     icon={<CloseIcon />}
                     bg="transparent"
                   />
+
+                  <Box bottom="10" position="absolute" width="full" left="0">
+                    <Text fontSize="md">me@edwinluo.com</Text>
+                  </Box>
                 </Box>
               )}
             </DrawerBody>
