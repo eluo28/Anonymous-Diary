@@ -1,24 +1,24 @@
 import {
   Box,
-  Button,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
   Flex,
   IconButton,
   Link,
-  useColorMode,
   Text,
-  Icon,
-  Collapse,
+  useColorMode,
+  useDisclosure,
 } from "@chakra-ui/core";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { CloseIcon, HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
 import React from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
 
 export const Navbar: React.FC<{}> = ({}) => {
-  const [show, setShow] = React.useState(false);
-  const toggleMenu = () => setShow(!show);
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
   const [{ data }] = useMeQuery({
     pause: isServer(),
@@ -31,61 +31,101 @@ export const Navbar: React.FC<{}> = ({}) => {
       align="center"
       justify="space-between"
       wrap="wrap"
-      bg="teal.500"
-      w="100%"
-      mb={8}
-      p={8}
+      padding="1.5rem"
     >
-      <Box mr={6}>Logo</Box>
+      <Box fontSize="xl">Anonymous Diary</Box>
 
-      <Box display={["block", "none"]} onClick={toggleMenu}>
-        <Text>hi</Text>
-        <HamburgerIcon />
-      </Box>
+      {data?.me ? (
+        <Text mr="auto" fontSize="xl">
+          &nbsp;| {data.me?.username}
+        </Text>
+      ) : null}
 
-      <Box
-        display={[show ? "block" : "none", "flex"]}
-        width={["full", "auto"]}
-        flexGrow={1}
-        alignItems="center"
-      >
-        <Text mr={4}>Explore</Text>
-      </Box>
+      <IconButton
+        aria-label="hamburger"
+        onClick={onOpen}
+        icon={<HamburgerIcon />}
+        bg="transparent"
+      />
 
-      {!data?.me ? (
-        <Box display="flex">
-          <NextLink href="/login">
-            <Button bg="transparent" border="1px" mr={6}>
-              Login
-            </Button>
-          </NextLink>
+      <Drawer onClose={onClose} isOpen={isOpen} size="full">
+        <DrawerOverlay>
+          <DrawerContent>
+            <DrawerBody
+              alignItems="center"
+              display="flex"
+              justifyContent="center"
+              fontSize="2xl"
+              textAlign="center"
+            >
+              {!data?.me ? (
+                <Box>
+                  <IconButton
+                    colorScheme="black"
+                    mb="8"
+                    _focus={{ outline: "none" }}
+                    aria-label="Dark Mode"
+                    variant="ghost"
+                    onClick={toggleColorMode}
+                    icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+                  />
 
-          <NextLink href="/register">
-            <Button bg="transparent" border="1px">
-              Register
-            </Button>
-          </NextLink>
-        </Box>
-      ) : (
-        <Box
-          display={[show ? "block" : "none", "flex"]}
-          alignItems="center"
-          mt={[4, 0]}
-        >
-          <Text mr={6}>{data.me?.username}</Text>
+                  <Box mb="8">
+                    <NextLink href="/login">
+                      <Link>Login</Link>
+                    </NextLink>
+                  </Box>
 
-          <Button
-            mt={[4, 0]}
-            bg="transparent"
-            border="1px"
-            onClick={() => {
-              logout();
-            }}
-          >
-            Logout
-          </Button>
-        </Box>
-      )}
+                  <Box mb="8">
+                    <NextLink href="/register">
+                      <Link>Register</Link>
+                    </NextLink>
+                  </Box>
+                  <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    icon={<CloseIcon />}
+                    bg="transparent"
+                  />
+                </Box>
+              ) : (
+                <Box>
+                  <IconButton
+                    colorScheme="black"
+                    mb="8"
+                    _focus={{ outline: "none" }}
+                    aria-label="Dark Mode"
+                    variant="ghost"
+                    onClick={toggleColorMode}
+                    icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+                  />
+                  <Box mb="8">
+                    <NextLink href="/my-diary">
+                      <Link>My Diary</Link>
+                    </NextLink>
+                  </Box>
+                  <Box mb="8">
+                    <Link
+                      onClick={() => {
+                        logout();
+                        onClose();
+                      }}
+                    >
+                      Logout
+                    </Link>
+                  </Box>
+                  <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    icon={<CloseIcon />}
+                    bg="transparent"
+                  />
+                </Box>
+              )}
+            </DrawerBody>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
     </Flex>
   );
 };

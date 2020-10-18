@@ -11,15 +11,8 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/core";
-import { AnimatePresence, motion, useMotionValue } from "framer-motion";
+
 import { usePostsQuery } from "../generated/graphql";
-
-const MotionBox = motion.custom(Box);
-
-const variants = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 },
-};
 
 export const Content: React.FC<{}> = ({}) => {
   const [variables, setVariables] = useState({
@@ -36,8 +29,8 @@ export const Content: React.FC<{}> = ({}) => {
   const text = useColorModeValue("black", "gray.100");
 
   return (
-    <MotionBox
-      flex="1"
+    <Box
+      flex={{ base: "none", md: "1" }}
       height="100vh"
       overflowY="scroll"
       bg={bg}
@@ -48,19 +41,16 @@ export const Content: React.FC<{}> = ({}) => {
       ) : (
         <VStack
           divider={<StackDivider borderColor={color} borderWidth="3px" />}
-          spacing={4}
         >
           {data!.posts.posts.map((p) =>
             !p ? null : (
-              <MotionBox
+              <Box
                 key={p.id}
                 p={5}
-                bg={color}
                 color={text}
-                minHeight="75vh"
-                width="30vw"
+                width={{ base: "100%", md: "35vw" }}
                 mx="auto"
-                my={16}
+                my={10}
               >
                 <Heading borderBottom="2px" textAlign="center" mb={1} pb={1}>
                   {p.title}
@@ -72,7 +62,7 @@ export const Content: React.FC<{}> = ({}) => {
                 <Text mt={4} fontSize="lg">
                   {p.textSnippet}
                 </Text>
-              </MotionBox>
+              </Box>
             )
           )}
 
@@ -94,6 +84,6 @@ export const Content: React.FC<{}> = ({}) => {
           ) : null}
         </VStack>
       )}
-    </MotionBox>
+    </Box>
   );
 };

@@ -117,7 +117,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
             </NextLink>
           </Flex>
         ) : (
-          //   <Text mr={6}>{data.me?.username}</Text>
+
           <>
             <Flex
               position="absolute"
