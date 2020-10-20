@@ -1,20 +1,16 @@
-import React, { useState } from "react";
 import {
   Box,
   Button,
-  Flex,
   Heading,
-  IconButton,
-  Stack,
   StackDivider,
   Text,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/core";
-
+import React, { useState } from "react";
 import { usePostsQuery } from "../generated/graphql";
 
-export const Content: React.FC<{}> = ({}) => {
+export const Explore: React.FC<{}> = ({}) => {
   const [variables, setVariables] = useState({
     limit: 10,
     cursor: null as null | string,
@@ -24,7 +20,7 @@ export const Content: React.FC<{}> = ({}) => {
     variables,
   });
 
-  const bg = useColorModeValue("gray.300", "gray.700");
+  const bg = useColorModeValue("gray.200", "gray.700");
   const color = useColorModeValue("white", "gray.800");
   const text = useColorModeValue("black", "gray.100");
 
@@ -60,11 +56,7 @@ export const Content: React.FC<{}> = ({}) => {
                 <Text textAlign="center">
                   {new Date(parseInt(p.createdAt)).toLocaleDateString()}
                 </Text>
-                <Text
-                  mt={4}
-                  fontSize="lg"
-                  textAlign="center"
-                >
+                <Text mt={4} fontSize="lg" textAlign="center">
                   {p.textSnippet}
                 </Text>
               </Box>

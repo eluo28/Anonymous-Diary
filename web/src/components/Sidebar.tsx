@@ -60,13 +60,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
   const [, logout] = useLogoutMutation();
 
   return (
-    <MotionBox
-      height="100vh"
-      initial={{ width: "0%" }}
-      animate={{ width: "50vw" }}
-      transition={{ duration: 1 }}
-      exit={{ opacity: 0, y: -20 }}
-    >
+    <MotionBox height="100vh" width="50vw">
       <MotionBox
         ml="16"
         mt="10"
@@ -117,7 +111,6 @@ export const Sidebar: React.FC<{}> = ({}) => {
             </NextLink>
           </Flex>
         ) : (
-
           <>
             <Flex
               position="absolute"

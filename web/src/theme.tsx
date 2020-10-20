@@ -17,6 +17,7 @@ const theme = extendTheme({
     heading: "Erato,serif",
     mono: "Erato,serif",
   },
+  initialColorMode: "dark",
 });
 
 export default theme;

@@ -83,7 +83,7 @@ const LoginForm = () => {
 };
 
 export const Login: React.FC<{}> = ({}) => {
-  const bg = useColorModeValue("gray.300", "gray.700");
+  const bg = useColorModeValue("gray.200", "gray.700");
   const bg2 = useColorModeValue("white", "gray.900");
 
   return (

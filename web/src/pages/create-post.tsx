@@ -26,9 +26,7 @@ const CreatePost: React.FC<{}> = ({}) => {
           const { error } = await createPost({ input: values });
           console.log(error);
 
-          if (!error) {
-            router.push("/");
-          }
+          
         }}
       >
         {({ isSubmitting }) => (
@@ -55,7 +53,7 @@ const CreatePost: React.FC<{}> = ({}) => {
               type="submit"
               mt={4}
               isLoading={isSubmitting}
-              variantColor="teal"
+              colorScheme="teal"
               variant="outline"
             >
               Create Post
