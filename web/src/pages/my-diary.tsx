@@ -3,7 +3,7 @@ import React from "react";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 export const MyDiary: React.FC<{}> = ({}) => {
-  return <div>hi</div>;
+  return <div>Test</div>;
 };
 
 export default withUrqlClient(createUrqlClient)(MyDiary);
