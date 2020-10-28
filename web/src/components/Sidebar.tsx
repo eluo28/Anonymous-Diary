@@ -49,7 +49,7 @@ const letterVariants = {
 
 const containerVariants = {
   before: {},
-  after: { transition: { staggerChildren: 0.15 } },
+  after: { transition: { staggerChildren: 0.12 } },
 };
 
 export const Sidebar: React.FC<{}> = ({}) => {
@@ -61,14 +61,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
 
   return (
     <MotionBox height="100vh" width="50vw">
-      <MotionBox
-        ml="16"
-        mt="10"
-        initial="hidden"
-        animate="visible"
-        variants={variants}
-        transition={{ duration: 3 }}
-      >
+      <MotionBox ml="16" mt="10">
         <MotionBox
           variants={containerVariants}
           initial={"before"}

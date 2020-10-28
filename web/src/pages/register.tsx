@@ -1,6 +1,13 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { Box, Button, Flex, Heading, useColorModeValue } from "@chakra-ui/core";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  useColorModeValue,
+} from "@chakra-ui/core";
 import { InputField } from "../components/InputField";
 import { useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
@@ -78,9 +85,10 @@ const RegisterForm = () => {
 };
 
 export const Register: React.FC<{}> = ({}) => {
-
   const bg = useColorModeValue("gray.300", "gray.700");
   const bg2 = useColorModeValue("white", "gray.900");
+  const dividerColor = useColorModeValue("gray.300", "white");
+
   return (
     <MotionBox
       minHeight="100vh"
@@ -105,6 +113,7 @@ export const Register: React.FC<{}> = ({}) => {
       >
         <Box p={4}>
           <Heading>Register</Heading>
+          <Divider borderWidth="1px" mt="1" borderColor={dividerColor} />
           <RegisterForm />
         </Box>
       </Box>

@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   Flex,
   Heading,
   Link,
@@ -85,6 +86,7 @@ const LoginForm = () => {
 export const Login: React.FC<{}> = ({}) => {
   const bg = useColorModeValue("gray.200", "gray.700");
   const bg2 = useColorModeValue("white", "gray.900");
+  const dividerColor = useColorModeValue("gray.300", "white");
 
   return (
     <MotionBox
@@ -110,6 +112,7 @@ export const Login: React.FC<{}> = ({}) => {
       >
         <Box p={4}>
           <Heading>Login</Heading>
+          <Divider borderWidth="1px" mt="1" borderColor={dividerColor} />
           <LoginForm />
         </Box>
       </Box>
