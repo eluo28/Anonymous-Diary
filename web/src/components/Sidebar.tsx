@@ -21,9 +21,14 @@ const anonymousText = Array.from("ANONYMOUS");
 const diaryText = Array.from("DIARY");
 
 const MotionBox = motion.custom<Omit<BoxProps, keyof MotionProps>>(Box);
+
 const variants = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 },
+  before: {
+    opacity: 0,
+  },
+  after: {
+    opacity: 1,
+  },
 };
 
 const letterVariants = {
@@ -61,7 +66,14 @@ export const Sidebar: React.FC<{}> = ({}) => {
 
   return (
     <MotionBox height="100vh" width="50vw">
-      <MotionBox ml="16" mt="10">
+      <MotionBox
+        ml="16"
+        mt="10"
+        variants={variants}
+        initial={"before"}
+        animate={"after"}
+        transition={{ duration: 2 }}
+      >
         <MotionBox
           variants={containerVariants}
           initial={"before"}
@@ -130,18 +142,6 @@ export const Sidebar: React.FC<{}> = ({}) => {
               >
                 Logout
               </Link>
-            </Flex>
-
-            <Flex
-              position="absolute"
-              left="50vw"
-              top="45vh"
-              transform="rotate(-90deg)"
-              fontSize="xl"
-            >
-              <NextLink href="/my-diary">
-                <Link>My Diary</Link>
-              </NextLink>
             </Flex>
           </>
         )}

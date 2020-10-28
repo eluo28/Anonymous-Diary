@@ -1,14 +1,20 @@
 import {
   Box,
+  BoxProps,
   Button,
+  Flex,
   Heading,
+  Link,
   StackDivider,
   Text,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/core";
+import { motion, MotionProps } from "framer-motion";
 import React, { useState } from "react";
 import { usePostsQuery } from "../generated/graphql";
+
+const MotionBox = motion.custom<Omit<BoxProps, keyof MotionProps>>(Box);
 
 export const Explore: React.FC<{}> = ({}) => {
   const [variables, setVariables] = useState({
@@ -25,7 +31,7 @@ export const Explore: React.FC<{}> = ({}) => {
   const text = useColorModeValue("black", "gray.100");
 
   return (
-    <Box
+    <MotionBox
       flex={{ base: "none", md: "1" }}
       height="100vh"
       overflowY="scroll"
@@ -36,51 +42,64 @@ export const Explore: React.FC<{}> = ({}) => {
       {!data && fetching ? (
         <div>loading...</div>
       ) : (
-        <VStack
-          divider={<StackDivider borderColor={color} borderWidth="3px" />}
-        >
-          {data!.posts.posts.map((p) =>
-            !p ? null : (
-              <Box
-                key={p.id}
-                p={5}
-                color={text}
-                width={{ base: "100%", md: "35vw" }}
+        <Box>
+          <Flex
+            position="absolute"
+            left="50vw"
+            display={{ base: "none", md: "flex" }}
+            top="45vh"
+            transform="rotate(-90deg)"
+            fontSize="xl"
+          >
+            <Link>My Diary</Link>
+          </Flex>
+
+          <VStack
+            divider={<StackDivider borderColor={color} borderWidth="3px" />}
+          >
+            {data!.posts.posts.map((p) =>
+              !p ? null : (
+                <Box
+                  key={p.id}
+                  p={5}
+                  color={text}
+                  width={{ base: "100%", md: "35vw" }}
+                  mx="auto"
+                  my={10}
+                >
+                  <Heading borderBottom="2px" textAlign="center" mb={1} pb={1}>
+                    {p.title}
+                  </Heading>
+
+                  <Text textAlign="center">
+                    {new Date(parseInt(p.createdAt)).toLocaleDateString()}
+                  </Text>
+                  <Text mt={4} fontSize="lg" textAlign="center">
+                    {p.textSnippet}
+                  </Text>
+                </Box>
+              )
+            )}
+
+            {data && data.posts.hasMore ? (
+              <Button
+                onClick={() => {
+                  setVariables({
+                    limit: variables.limit,
+                    cursor:
+                      data.posts.posts[data.posts.posts.length - 1].createdAt,
+                  });
+                }}
+                isLoading={fetching}
+                mt={4}
                 mx="auto"
-                my={10}
               >
-                <Heading borderBottom="2px" textAlign="center" mb={1} pb={1}>
-                  {p.title}
-                </Heading>
-
-                <Text textAlign="center">
-                  {new Date(parseInt(p.createdAt)).toLocaleDateString()}
-                </Text>
-                <Text mt={4} fontSize="lg" textAlign="center">
-                  {p.textSnippet}
-                </Text>
-              </Box>
-            )
-          )}
-
-          {data && data.posts.hasMore ? (
-            <Button
-              onClick={() => {
-                setVariables({
-                  limit: variables.limit,
-                  cursor:
-                    data.posts.posts[data.posts.posts.length - 1].createdAt,
-                });
-              }}
-              isLoading={fetching}
-              mt={4}
-              mx="auto"
-            >
-              Load More
-            </Button>
-          ) : null}
-        </VStack>
+                Load More
+              </Button>
+            ) : null}
+          </VStack>
+        </Box>
       )}
-    </Box>
+    </MotionBox>
   );
 };
