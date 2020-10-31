@@ -1,12 +1,15 @@
-import { Box, Hide } from "@chakra-ui/core";
+import { Box, Flex, Hide, Link } from "@chakra-ui/core";
 import { withUrqlClient } from "next-urql";
-import React from "react";
+import React, { useState } from "react";
+import { Diary } from "../components/Diary";
 import { Explore } from "../components/Explore";
 import { Navbar } from "../components/Navbar";
 import { Sidebar } from "../components/Sidebar";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Index = () => {
+  const [diaryShow, setDiaryShow] = useState(false);
+
   return (
     <Box display={{ base: "block", md: "flex" }}>
       <Hide below="md">
@@ -16,7 +19,7 @@ const Index = () => {
         <Navbar />
       </Hide>
 
-      <Explore />
+      {diaryShow ? <Diary /> : <Explore showDiary={setDiaryShow} />}
     </Box>
   );
 };
