@@ -25,7 +25,11 @@ const variants = {
   },
 };
 
-export const Diary: React.FC<{}> = ({}) => {
+type DiaryProps = {
+  showDiary: (show: boolean) => void;
+};
+
+export const Diary: React.FC<DiaryProps> = ({ showDiary }) => {
   const [variables, setVariables] = useState({
     limit: 10,
     cursor: null as null | string,
@@ -39,5 +43,32 @@ export const Diary: React.FC<{}> = ({}) => {
   const color = useColorModeValue("white", "gray.900");
   const text = useColorModeValue("black", "gray.100");
 
-  return <div>Diary</div>;
+  return (
+    <MotionBox
+      flex={{ base: "none", md: "1" }}
+      height="100vh"
+      overflowY="scroll"
+      bg={bg}
+      overflowX="hidden"
+      pt={{ base: "75px", md: "0" }}
+    >
+      <MotionBox
+        variants={variants}
+        initial={"before"}
+        animate={"after"}
+        transition={{ duration: 2 }}
+      >
+        <Flex
+          position="absolute"
+          left="50vw"
+          display={{ base: "none", md: "flex" }}
+          top="45vh"
+          transform="rotate(-90deg)"
+          fontSize="xl"
+        >
+          <Link onClick={() => showDiary(false)}>Explore</Link>
+        </Flex>
+      </MotionBox>
+    </MotionBox>
+  );
 };

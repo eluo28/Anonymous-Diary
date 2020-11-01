@@ -25,11 +25,11 @@ const variants = {
   },
 };
 
-type ExploreProps = React.Dispatch<React.SetStateAction<boolean>> & {
+type ExploreProps = {
   showDiary: (show: boolean) => void;
 };
 
-export const Explore: React.FC<ExploreProps> = (props) => {
+export const Explore: React.FC<ExploreProps> = ({ showDiary }) => {
   const [variables, setVariables] = useState({
     limit: 10,
     cursor: null as null | string,
@@ -70,7 +70,7 @@ export const Explore: React.FC<ExploreProps> = (props) => {
               transform="rotate(-90deg)"
               fontSize="xl"
             >
-              <Link onClick={() => props.showDiary(true)}>My Diary</Link>
+              <Link onClick={() => showDiary(true)}>My Diary</Link>
             </Flex>
 
             <VStack

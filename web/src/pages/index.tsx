@@ -19,7 +19,11 @@ const Index = () => {
         <Navbar />
       </Hide>
 
-      {diaryShow ? <Diary /> : <Explore showDiary={setDiaryShow} />}
+      {diaryShow ? (
+        <Diary showDiary={setDiaryShow} />
+      ) : (
+        <Explore showDiary={setDiaryShow} />
+      )}
     </Box>
   );
 };
