@@ -68,6 +68,51 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary }) => {
         >
           <Link onClick={() => showDiary(false)}>Explore</Link>
         </Flex>
+
+        <VStack
+          divider={<StackDivider borderColor={color} borderWidth="3px" />}
+        >
+          {data!.posts.posts.map((p) =>
+            !p ? null : (
+              <Box
+                key={p.id}
+                p={5}
+                color={text}
+                width={{ base: "100%", md: "35vw" }}
+                mx="auto"
+                my={10}
+              >
+                <Heading borderBottom="2px" textAlign="center" mb={1} pb={1}>
+                  {p.title}
+                </Heading>
+
+                <Text textAlign="center">
+                  {new Date(parseInt(p.createdAt)).toLocaleDateString()}
+                </Text>
+                <Text mt={4} fontSize="lg" textAlign="center">
+                  {p.textSnippet}
+                </Text>
+              </Box>
+            )
+          )}
+
+          {data && data.posts.hasMore ? (
+            <Button
+              onClick={() => {
+                setVariables({
+                  limit: variables.limit,
+                  cursor:
+                    data.posts.posts[data.posts.posts.length - 1].createdAt,
+                });
+              }}
+              isLoading={fetching}
+              mt={4}
+              mx="auto"
+            >
+              Load More
+            </Button>
+          ) : null}
+        </VStack>
       </MotionBox>
     </MotionBox>
   );
