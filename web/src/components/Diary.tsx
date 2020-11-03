@@ -11,7 +11,7 @@ import {
   VStack,
 } from "@chakra-ui/core";
 import { motion, MotionProps } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePostsQuery } from "../generated/graphql";
 
 const MotionBox = motion.custom<Omit<BoxProps, keyof MotionProps>>(Box);
@@ -26,10 +26,11 @@ const variants = {
 };
 
 type DiaryProps = {
-  showDiary: (show: boolean) => void;
+  showDiary: (show: string) => void;
+  diaryShow: string;
 };
 
-export const Diary: React.FC<DiaryProps> = ({ showDiary }) => {
+export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
   const [variables, setVariables] = useState({
     limit: 10,
     cursor: null as null | string,
@@ -42,6 +43,10 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary }) => {
   const bg = useColorModeValue("gray.200", "gray.700");
   const color = useColorModeValue("white", "gray.900");
   const text = useColorModeValue("black", "gray.100");
+
+  useEffect(() => {
+    localStorage.setItem("diaryShow", diaryShow);
+  }, [diaryShow]);
 
   return (
     <MotionBox
@@ -66,9 +71,10 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary }) => {
           transform="rotate(-90deg)"
           fontSize="xl"
         >
-          <Link onClick={() => showDiary(false)}>Explore</Link>
+          <Link onClick={() => showDiary("true")}>Explore</Link>
         </Flex>
 
+        <Heading>DIARY PAGE</Heading>
         <VStack
           divider={<StackDivider borderColor={color} borderWidth="3px" />}
         >
