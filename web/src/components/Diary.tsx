@@ -2,6 +2,7 @@ import {
   Box,
   BoxProps,
   Button,
+  Divider,
   Flex,
   Heading,
   Link,
@@ -40,7 +41,7 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
     variables,
   });
 
-  const bg = useColorModeValue("gray.200", "gray.700");
+  const bg = useColorModeValue("gray.300", "gray.700");
   const color = useColorModeValue("white", "gray.900");
   const text = useColorModeValue("black", "gray.100");
 
@@ -74,7 +75,10 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
           <Link onClick={() => showDiary("true")}>Explore</Link>
         </Flex>
 
-        <Heading>DIARY PAGE</Heading>
+        <Box p={5} color={text} textAlign="center" borderBottom="2px">
+          <Heading>My Diary</Heading>
+        </Box>
+
         <VStack
           divider={<StackDivider borderColor={color} borderWidth="3px" />}
         >
