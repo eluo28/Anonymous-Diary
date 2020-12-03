@@ -40,7 +40,6 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
     variables,
   });
 
-  const bg = useColorModeValue("gray.200", "gray.700");
   const color = useColorModeValue("white", "gray.900");
   const text = useColorModeValue("black", "gray.100");
 
@@ -53,7 +52,6 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
       flex={{ base: "none", md: "1" }}
       height="100vh"
       overflowY="scroll"
-      bg={bg}
       overflowX="hidden"
       pt={{ base: "75px", md: "0" }}
     >
@@ -69,7 +67,7 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
           <Box>
             <Flex
               position="absolute"
-              left="50vw"
+              left="25vw"
               display={{ base: "none", md: "flex" }}
               top="45vh"
               transform="rotate(-90deg)"

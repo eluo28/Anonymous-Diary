@@ -64,8 +64,10 @@ export const Sidebar: React.FC<{}> = ({}) => {
   });
   const [, logout] = useLogoutMutation();
 
+  const bg = useColorModeValue("gray.100", "gray.900");
+
   return (
-    <MotionBox height="100vh" width="50vw">
+    <MotionBox height="100vh" width="25vw" bgColor={bg}>
       <MotionBox
         ml="16"
         mt="10"
@@ -99,7 +101,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
         {!data?.me ? (
           <Flex
             position="absolute"
-            left="50vw"
+            left="25vw"
             top="45vh"
             ml="-90px"
             transform="rotate(90deg)"
@@ -119,7 +121,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
           <>
             <Flex
               position="absolute"
-              left="50vw"
+              left="25vw"
               fontSize="xl"
               ml="-90px"
               top="10"
@@ -129,7 +131,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
 
             <Flex
               position="absolute"
-              left="50vw"
+              left="25vw"
               top="45vh"
               transform="rotate(90deg)"
               fontSize="xl"
@@ -157,7 +159,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
           </Box>
         </Box>
 
-        <Flex position="absolute" left="50vw" ml="-50px" bottom="4vh">
+        <Flex position="absolute" left="25vw" ml="-50px" bottom="4vh">
           <IconButton
             colorScheme="black"
             _focus={{ outline: "none" }}

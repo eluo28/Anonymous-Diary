@@ -41,8 +41,8 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
     variables,
   });
 
-  const bg = useColorModeValue("gray.300", "gray.700");
-  const color = useColorModeValue("white", "gray.900");
+
+  const color = useColorModeValue("gray.100", "gray.900");
   const text = useColorModeValue("black", "gray.100");
 
   useEffect(() => {
@@ -54,7 +54,6 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
       flex={{ base: "none", md: "1" }}
       height="100vh"
       overflowY="scroll"
-      bg={bg}
       overflowX="hidden"
       pt={{ base: "75px", md: "0" }}
     >
@@ -66,7 +65,7 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
       >
         <Flex
           position="absolute"
-          left="50vw"
+          left="25vw"
           display={{ base: "none", md: "flex" }}
           top="45vh"
           transform="rotate(-90deg)"
