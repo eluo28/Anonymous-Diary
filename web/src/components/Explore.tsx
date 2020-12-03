@@ -141,6 +141,7 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
                   }}
                   isLoading={fetching}
                   mt={4}
+                  mb={4}
                   mx="auto"
                 >
                   Load More

@@ -125,6 +125,7 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
               isLoading={fetching}
               mt={4}
               mx="auto"
+              mb={4}
             >
               Load More
             </Button>
