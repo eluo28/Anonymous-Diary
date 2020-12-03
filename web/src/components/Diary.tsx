@@ -41,9 +41,9 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
     variables,
   });
 
-
   const color = useColorModeValue("gray.100", "gray.900");
   const text = useColorModeValue("black", "gray.100");
+  const header = useColorModeValue("gray.800", "gray.800");
 
   useEffect(() => {
     localStorage.setItem("diaryShow", diaryShow);
@@ -51,11 +51,11 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
 
   return (
     <MotionBox
-      flex={{ base: "none", md: "1" }}
+      flex={{ base: "none", lg: "1" }}
       height="100vh"
       overflowY="scroll"
       overflowX="hidden"
-      pt={{ base: "75px", md: "0" }}
+      pt={{ base: "75px", lg: "0" }}
     >
       <MotionBox
         variants={variants}
@@ -65,8 +65,8 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
       >
         <Flex
           position="absolute"
-          left="25vw"
-          display={{ base: "none", md: "flex" }}
+          left="30vw"
+          display={{ base: "none", lg: "flex" }}
           top="45vh"
           transform="rotate(-90deg)"
           fontSize="xl"
@@ -74,7 +74,15 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
           <Link onClick={() => showDiary("true")}>Explore</Link>
         </Flex>
 
-        <Box p={5} color={text} textAlign="center" borderBottom="2px">
+        <Box
+          p={5}
+          color="white"
+          textAlign="center"
+          display={{ base: "none", lg: "block" }}
+          backgroundColor={header}
+          top="0"
+          position="sticky"
+        >
           <Heading>My Diary</Heading>
         </Box>
 
@@ -87,7 +95,7 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
                 key={p.id}
                 p={5}
                 color={text}
-                width={{ base: "100%", md: "35vw" }}
+                width={{ base: "100%", lg: "50vw" }}
                 mx="auto"
                 my={10}
               >

@@ -12,7 +12,8 @@ import {
 } from "@chakra-ui/core";
 import { motion, MotionProps } from "framer-motion";
 import React, { InputHTMLAttributes, useEffect, useState } from "react";
-import { usePostsQuery } from "../generated/graphql";
+import { useMeQuery, usePostsQuery } from "../generated/graphql";
+import { isServer } from "../utils/isServer";
 
 const MotionBox = motion.custom<Omit<BoxProps, keyof MotionProps>>(Box);
 
@@ -40,8 +41,14 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
     variables,
   });
 
-  const color = useColorModeValue("white", "gray.900");
+  const [{ data: me }] = useMeQuery({
+    pause: isServer(),
+  });
+
+  const bg = useColorModeValue("white", "gray.700");
+  const color = useColorModeValue("gray.300", "gray.900");
   const text = useColorModeValue("black", "gray.100");
+  const header = useColorModeValue("gray.800", "gray.800");
 
   useEffect(() => {
     localStorage.setItem("diaryShow", diaryShow);
@@ -49,11 +56,11 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
 
   return (
     <MotionBox
-      flex={{ base: "none", md: "1" }}
+      flex={{ base: "none", lg: "1" }}
       height="100vh"
       overflowY="scroll"
       overflowX="hidden"
-      pt={{ base: "75px", md: "0" }}
+      pt={{ base: "75px", lg: "0" }}
     >
       <MotionBox
         variants={variants}
@@ -65,19 +72,34 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
           <div>loading...</div>
         ) : (
           <Box>
-            <Flex
-              position="absolute"
-              left="25vw"
-              display={{ base: "none", md: "flex" }}
-              top="45vh"
-              transform="rotate(-90deg)"
-              fontSize="xl"
+            {me.me ? (
+              <Flex
+                position="absolute"
+                left="30vw"
+                display={{ base: "none", lg: "flex" }}
+                top="45vh"
+                transform="rotate(-90deg)"
+                fontSize="xl"
+              >
+                <Link onClick={() => showDiary("false")}>My Diary</Link>
+              </Flex>
+            ) : null}
+
+            <Box
+              p={5}
+              color="white"
+              textAlign="center"
+              display={{ base: "none", lg: "block" }}
+              backgroundColor={header}
+              top="0"
+              position="sticky"
             >
-              <Link onClick={() => showDiary("false")}>My Diary</Link>
-            </Flex>
+              <Heading>Explore</Heading>
+            </Box>
 
             <VStack
               divider={<StackDivider borderColor={color} borderWidth="3px" />}
+              bgColor={bg}
             >
               {data!.posts.posts.map((p) =>
                 !p ? null : (
@@ -85,7 +107,7 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
                     key={p.id}
                     p={5}
                     color={text}
-                    width={{ base: "100%", md: "35vw" }}
+                    width={{ base: "100%", lg: "50vw" }}
                     mx="auto"
                     my={10}
                   >

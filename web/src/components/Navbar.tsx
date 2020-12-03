@@ -14,11 +14,16 @@ import {
 } from "@chakra-ui/core";
 import { CloseIcon, HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
 
-export const Navbar: React.FC<{}> = ({}) => {
+type DiaryProps = {
+  showDiary: (show: string) => void;
+  diaryShow: string;
+};
+
+export const Navbar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
   const [{ data }] = useMeQuery({
@@ -26,7 +31,12 @@ export const Navbar: React.FC<{}> = ({}) => {
   });
   const [, logout] = useLogoutMutation();
 
-  const bg = useColorModeValue("white", "gray.900");
+  useEffect(() => {
+    localStorage.setItem("diaryShow", diaryShow);
+  }, [diaryShow]);
+
+  const bg = useColorModeValue("gray.700", "gray.800");
+  const bgD = useColorModeValue("gray.100", "gray.700");
 
   return (
     <Flex
@@ -40,6 +50,7 @@ export const Navbar: React.FC<{}> = ({}) => {
       height="75px"
       bg={bg}
       px="5"
+      color="white"
     >
       <Box fontSize="xl">Anonymous Diary</Box>
 
@@ -48,6 +59,16 @@ export const Navbar: React.FC<{}> = ({}) => {
           &nbsp;| {data.me?.username}
         </Text>
       ) : null}
+
+      {diaryShow === "true" ? (
+        <Box mr={4} fontSize="xl">
+          Explore
+        </Box>
+      ) : (
+        <Box mr={4} fontSize="xl">
+          My Diary
+        </Box>
+      )}
 
       <IconButton
         aria-label="hamburger"
@@ -65,6 +86,7 @@ export const Navbar: React.FC<{}> = ({}) => {
               justifyContent="center"
               fontSize="2xl"
               textAlign="center"
+              backgroundColor={bgD}
             >
               {!data?.me ? (
                 <Box>
@@ -112,11 +134,31 @@ export const Navbar: React.FC<{}> = ({}) => {
                     onClick={toggleColorMode}
                     icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
                   />
-                  <Box mb="8">
-                    <NextLink href="/my-diary">
-                      <Link>My Diary</Link>
-                    </NextLink>
-                  </Box>
+
+                  {diaryShow === "true" ? (
+                    <Box mb="8">
+                      <Link
+                        onClick={() => {
+                          showDiary("false");
+                          onClose();
+                        }}
+                      >
+                        My Diary
+                      </Link>
+                    </Box>
+                  ) : (
+                    <Box mb="8">
+                      <Link
+                        onClick={() => {
+                          showDiary("true");
+                          onClose();
+                        }}
+                      >
+                        Explore
+                      </Link>
+                    </Box>
+                  )}
+
                   <Box mb="8">
                     <Link
                       onClick={() => {

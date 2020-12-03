@@ -11,7 +11,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/core";
 import { AnimatePresence, motion, MotionProps } from "framer-motion";
-import React from "react";
+import React, { useEffect } from "react";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
 import NextLink from "next/link";
@@ -57,17 +57,26 @@ const containerVariants = {
   after: { transition: { staggerChildren: 0.12 } },
 };
 
-export const Sidebar: React.FC<{}> = ({}) => {
+type DiaryProps = {
+  showDiary: (show: string) => void;
+  diaryShow: string;
+};
+
+export const Sidebar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const [{ data }] = useMeQuery({
     pause: isServer(),
   });
   const [, logout] = useLogoutMutation();
 
-  const bg = useColorModeValue("gray.100", "gray.900");
+  const bg = useColorModeValue("gray.300", "gray.900");
+
+  useEffect(() => {
+    localStorage.setItem("diaryShow", diaryShow);
+  }, [diaryShow]);
 
   return (
-    <MotionBox height="100vh" width="25vw" bgColor={bg}>
+    <MotionBox height="100vh" width="30vw" bgColor={bg}>
       <MotionBox
         ml="16"
         mt="10"
@@ -101,7 +110,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
         {!data?.me ? (
           <Flex
             position="absolute"
-            left="25vw"
+            left="30vw"
             top="45vh"
             ml="-90px"
             transform="rotate(90deg)"
@@ -121,7 +130,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
           <>
             <Flex
               position="absolute"
-              left="25vw"
+              left="30vw"
               fontSize="xl"
               ml="-90px"
               top="10"
@@ -131,7 +140,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
 
             <Flex
               position="absolute"
-              left="25vw"
+              left="30vw"
               top="45vh"
               transform="rotate(90deg)"
               fontSize="xl"
@@ -140,6 +149,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
               <Link
                 onClick={() => {
                   logout();
+                  showDiary("true");
                 }}
               >
                 Logout
@@ -159,7 +169,7 @@ export const Sidebar: React.FC<{}> = ({}) => {
           </Box>
         </Box>
 
-        <Flex position="absolute" left="25vw" ml="-50px" bottom="4vh">
+        <Flex position="absolute" left="30vw" ml="-50px" bottom="3.5vh">
           <IconButton
             colorScheme="black"
             _focus={{ outline: "none" }}

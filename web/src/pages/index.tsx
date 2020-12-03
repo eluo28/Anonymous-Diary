@@ -16,12 +16,12 @@ const Index = () => {
   }, []);
 
   return (
-    <Box display={{ base: "block", md: "flex" }}>
-      <Hide below="md">
-        <Sidebar />
+    <Box display={{ base: "block", lg: "flex" }}>
+      <Hide below="lg">
+        <Sidebar showDiary={setDiaryShow} diaryShow={diaryShow} />
       </Hide>
-      <Hide above="md">
-        <Navbar />
+      <Hide above="lg">
+        <Navbar showDiary={setDiaryShow} diaryShow={diaryShow}/>
       </Hide>
 
       {diaryShow === "false" ? (
