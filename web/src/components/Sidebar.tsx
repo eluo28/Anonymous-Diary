@@ -69,7 +69,7 @@ export const Sidebar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
   });
   const [, logout] = useLogoutMutation();
 
-  const bg = useColorModeValue("gray.300", "gray.900");
+  const bg = useColorModeValue("gray.200", "gray.900");
 
   useEffect(() => {
     localStorage.setItem("diaryShow", diaryShow);

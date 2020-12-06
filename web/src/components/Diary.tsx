@@ -5,12 +5,14 @@ import {
   Divider,
   Flex,
   Heading,
+  IconButton,
   Link,
   StackDivider,
   Text,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/core";
+import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { motion, MotionProps } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { usePostsQuery } from "../generated/graphql";
@@ -41,9 +43,9 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
     variables,
   });
 
-  const color = useColorModeValue("gray.100", "gray.900");
+  const color = useColorModeValue("gray.200", "gray.900");
   const text = useColorModeValue("black", "gray.100");
-  const header = useColorModeValue("gray.800", "gray.800");
+  const header = useColorModeValue("#2C2F33", "#23272A");
 
   useEffect(() => {
     localStorage.setItem("diaryShow", diaryShow);
@@ -74,31 +76,37 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
           <Link onClick={() => showDiary("true")}>Explore</Link>
         </Flex>
 
-        <Box
+        <Flex
           p={5}
-          color="white"
           textAlign="center"
-          display={{ base: "none", lg: "block" }}
+          display={{ base: "none", lg: "flex" }}
           backgroundColor={header}
           top="0"
           position="sticky"
+          justify="space-between"
+          color="white"
         >
-          <Heading>My Diary</Heading>
-        </Box>
+          <Heading ml={4} >
+            My Diary
+          </Heading>
+          <IconButton mr={4} aria-label="add" variant = "ghost" icon={<AddIcon />} />
+        </Flex>
 
         <VStack
           divider={<StackDivider borderColor={color} borderWidth="3px" />}
         >
           {data!.posts.posts.map((p) =>
             !p ? null : (
-              <Box
+              <Flex
                 key={p.id}
-                p={5}
+           
                 color={text}
                 width={{ base: "100%", lg: "50vw" }}
-                mx="auto"
-                my={10}
+                direction="column"
+         
+
               >
+                <Box my={10} p={5}>
                 <Heading borderBottom="2px" textAlign="center" mb={1} pb={1}>
                   {p.title}
                 </Heading>
@@ -109,7 +117,10 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
                 <Text mt={4} fontSize="lg" textAlign="center">
                   {p.textSnippet}
                 </Text>
-              </Box>
+                </Box>
+                <IconButton mx="auto" aria-label="delete" variant = "ghost" icon={<DeleteIcon />} />
+        
+              </Flex>
             )
           )}
 

@@ -46,9 +46,9 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
   });
 
   const bg = useColorModeValue("white", "gray.700");
-  const color = useColorModeValue("gray.300", "gray.900");
+  const color = useColorModeValue("gray.200", "gray.900");
   const text = useColorModeValue("black", "gray.100");
-  const header = useColorModeValue("gray.800", "gray.800");
+  const header = useColorModeValue("#2C2F33", "#23272A");
 
   useEffect(() => {
     localStorage.setItem("diaryShow", diaryShow);
