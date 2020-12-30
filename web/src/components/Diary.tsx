@@ -16,6 +16,7 @@ import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { motion, MotionProps } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { usePostsQuery } from "../generated/graphql";
+import Cookie from "js-cookie";
 
 const MotionBox = motion.custom<Omit<BoxProps, keyof MotionProps>>(Box);
 
@@ -29,8 +30,8 @@ const variants = {
 };
 
 type DiaryProps = {
-  showDiary: (show: string) => void;
-  diaryShow: string;
+  showDiary: (show: boolean) => void;
+  diaryShow: boolean;
 };
 
 export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
@@ -47,8 +48,8 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
   const text = useColorModeValue("black", "gray.100");
   const header = useColorModeValue("#2C2F33", "#23272A");
 
-  useEffect(() => {
-    localStorage.setItem("diaryShow", diaryShow);
+  React.useEffect(() => {
+    Cookie.set("diaryShow", diaryShow);
   }, [diaryShow]);
 
   return (
@@ -73,7 +74,7 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
           transform="rotate(-90deg)"
           fontSize="xl"
         >
-          <Link onClick={() => showDiary("true")}>Explore</Link>
+          <Link onClick={() => showDiary(true)}>Explore</Link>
         </Flex>
 
         <Flex
@@ -85,11 +86,15 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
           position="sticky"
           justify="space-between"
           color="white"
+          zIndex="10"
         >
-          <Heading ml={4} >
-            My Diary
-          </Heading>
-          <IconButton mr={4} aria-label="add" variant = "ghost" icon={<AddIcon />} />
+          <Heading ml={4}>My Diary</Heading>
+          <IconButton
+            mr={4}
+            aria-label="add"
+            variant="ghost"
+            icon={<AddIcon />}
+          />
         </Flex>
 
         <VStack
@@ -97,30 +102,43 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
         >
           {data!.posts.posts.map((p) =>
             !p ? null : (
-              <Flex
-                key={p.id}
-           
-                color={text}
-                width={{ base: "100%", lg: "50vw" }}
-                direction="column"
-         
+              <Box width="100%">
+                <Flex
+                  key={p.id}
+                  color={text}
+                  width={{ base: "100%", lg: "50vw" }}
+                  direction="column"
+                  mx="auto"
+                >
+                  <Box my={10} p={5}>
+                    <Heading
+                      borderBottom="2px"
+                      textAlign="center"
+                      mb={1}
+                      pb={1}
+                    >
+                      {p.title}
+                    </Heading>
 
-              >
-                <Box my={10} p={5}>
-                <Heading borderBottom="2px" textAlign="center" mb={1} pb={1}>
-                  {p.title}
-                </Heading>
+                    <Text textAlign="center">
+                      {new Date(parseInt(p.createdAt)).toLocaleDateString()}
+                    </Text>
+                    <Text mt={4} fontSize="lg" textAlign="center">
+                      {p.textSnippet}
+                    </Text>
+                  </Box>
+                </Flex>
 
-                <Text textAlign="center">
-                  {new Date(parseInt(p.createdAt)).toLocaleDateString()}
-                </Text>
-                <Text mt={4} fontSize="lg" textAlign="center">
-                  {p.textSnippet}
-                </Text>
-                </Box>
-                <IconButton mx="auto" aria-label="delete" variant = "ghost" icon={<DeleteIcon />} />
-        
-              </Flex>
+                <Flex>
+                  <IconButton
+                    ml="auto"
+                    mr="3"
+                    aria-label="delete"
+                    variant="ghost"
+                    icon={<DeleteIcon />}
+                  />
+                </Flex>
+              </Box>
             )
           )}
 

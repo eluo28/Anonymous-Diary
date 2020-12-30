@@ -14,6 +14,7 @@ import { motion, MotionProps } from "framer-motion";
 import React, { InputHTMLAttributes, useEffect, useState } from "react";
 import { useMeQuery, usePostsQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
+import Cookie from "js-cookie";
 
 const MotionBox = motion.custom<Omit<BoxProps, keyof MotionProps>>(Box);
 
@@ -27,8 +28,8 @@ const variants = {
 };
 
 type ExploreProps = {
-  showDiary: (show: string) => void;
-  diaryShow: string;
+  showDiary: (show: boolean) => void;
+  diaryShow: boolean;
 };
 
 export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
@@ -50,8 +51,9 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
   const text = useColorModeValue("black", "gray.100");
   const header = useColorModeValue("#2C2F33", "#23272A");
 
-  useEffect(() => {
-    localStorage.setItem("diaryShow", diaryShow);
+ 
+  React.useEffect(() => {
+    Cookie.set("diaryShow",diaryShow)
   }, [diaryShow]);
 
   return (
@@ -72,7 +74,7 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
           <div>loading...</div>
         ) : (
           <Box>
-            {me.me ? (
+            {me?.me ? (
               <Flex
                 position="absolute"
                 left="30vw"
@@ -81,7 +83,7 @@ export const Explore: React.FC<ExploreProps> = ({ showDiary, diaryShow }) => {
                 transform="rotate(-90deg)"
                 fontSize="xl"
               >
-                <Link onClick={() => showDiary("false")}>My Diary</Link>
+                <Link onClick={() => showDiary(false)}>My Diary</Link>
               </Flex>
             ) : null}
 

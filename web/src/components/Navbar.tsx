@@ -17,10 +17,11 @@ import NextLink from "next/link";
 import React, { useEffect } from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
+import Cookie from "js-cookie";
 
 type DiaryProps = {
-  showDiary: (show: string) => void;
-  diaryShow: string;
+  showDiary: (show: boolean) => void;
+  diaryShow: boolean;
 };
 
 export const Navbar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
@@ -32,7 +33,7 @@ export const Navbar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
   const [, logout] = useLogoutMutation();
 
   useEffect(() => {
-    localStorage.setItem("diaryShow", diaryShow);
+    Cookie.set("diaryShow", diaryShow);
   }, [diaryShow]);
 
   const bg = useColorModeValue("gray.700", "gray.800");
@@ -51,6 +52,7 @@ export const Navbar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
       bg={bg}
       px="5"
       color="white"
+      zIndex="10"
     >
       <Box fontSize="xl">Anonymous Diary</Box>
 
@@ -60,15 +62,17 @@ export const Navbar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
         </Text>
       ) : null}
 
-      {diaryShow === "true" ? (
-        <Box mr={4} fontSize="xl">
-          Explore
-        </Box>
-      ) : (
-        <Box mr={4} fontSize="xl">
-          My Diary
-        </Box>
-      )}
+      <Box display={{ base: "none", sm: "block" }}>
+        {diaryShow ? (
+          <Box mr={4} fontSize="xl">
+            Explore
+          </Box>
+        ) : (
+          <Box mr={4} fontSize="xl">
+            My Diary
+          </Box>
+        )}
+      </Box>
 
       <IconButton
         aria-label="hamburger"
@@ -135,11 +139,11 @@ export const Navbar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
                     icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
                   />
 
-                  {diaryShow === "true" ? (
+                  {diaryShow ? (
                     <Box mb="8">
                       <Link
                         onClick={() => {
-                          showDiary("false");
+                          showDiary(false);
                           onClose();
                         }}
                       >
@@ -150,7 +154,7 @@ export const Navbar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
                     <Box mb="8">
                       <Link
                         onClick={() => {
-                          showDiary("true");
+                          showDiary(true);
                           onClose();
                         }}
                       >
