@@ -16,6 +16,7 @@ import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
 import NextLink from "next/link";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import Cookie from "js-cookie";
 
 const anonymousText = Array.from("ANONYMOUS");
 const diaryText = Array.from("DIARY");
@@ -58,8 +59,8 @@ const containerVariants = {
 };
 
 type DiaryProps = {
-  showDiary: (show: string) => void;
-  diaryShow: string;
+  showDiary: (show: boolean) => void;
+  diaryShow: boolean;
 };
 
 export const Sidebar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
@@ -71,8 +72,8 @@ export const Sidebar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
 
   const bg = useColorModeValue("gray.200", "gray.900");
 
-  useEffect(() => {
-    localStorage.setItem("diaryShow", diaryShow);
+  React.useEffect(() => {
+    Cookie.set("diaryShow", diaryShow);
   }, [diaryShow]);
 
   return (
@@ -149,7 +150,7 @@ export const Sidebar: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
               <Link
                 onClick={() => {
                   logout();
-                  showDiary("true");
+                  showDiary(true);
                 }}
               >
                 Logout

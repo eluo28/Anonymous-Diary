@@ -15,9 +15,11 @@ function parseCookies(req) {
 }
 
 const Index = ({ initialRememberValue }) => {
-  const [diaryShow, setDiaryShow] = useState(() =>
-    JSON.parse(initialRememberValue)
-  );
+  const [diaryShow, setDiaryShow] = useState(initialRememberValue);
+
+  React.useEffect(() => {
+    Cookie.set("diaryShow", diaryShow);
+  }, [diaryShow]);
 
   return (
     <Box display={{ base: "block", lg: "flex" }}>
@@ -39,8 +41,23 @@ const Index = ({ initialRememberValue }) => {
 
 Index.getInitialProps = ({ req }) => {
   const cookies = parseCookies(req);
+
+  let undef = false;
+
+  if (cookies.diaryShow === "undefined") {
+    undef = true;
+  }
+
+  let res;
+
+  if (undef) {
+    res = true;
+  } else {
+    res = JSON.parse(cookies.diaryShow);
+  }
+
   return {
-    initialRememberValue: cookies.diaryShow,
+    initialRememberValue: res,
   };
 };
 

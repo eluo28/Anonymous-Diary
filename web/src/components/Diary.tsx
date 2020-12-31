@@ -102,9 +102,8 @@ export const Diary: React.FC<DiaryProps> = ({ showDiary, diaryShow }) => {
         >
           {data!.posts.posts.map((p) =>
             !p ? null : (
-              <Box width="100%">
+              <Box width="100%" key={p.id}>
                 <Flex
-                  key={p.id}
                   color={text}
                   width={{ base: "100%", lg: "50vw" }}
                   direction="column"
